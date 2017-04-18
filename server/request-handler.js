@@ -27,32 +27,49 @@ var requestHandler = function(request, response) {
   // debugging help, but you should always be careful about leaving stray
   // console.logs in your code.
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
-
-  // The outgoing status.
+// bode.results.username
+  var results = [];
   var statusCode;
+  // var headers = defaultCorsHeaders;
+  var headers = {'Content-Type': 'application/json'};
+
   if (request.method === 'GET') {
     if (request.url === "/classes/messages") {
       statusCode = 200;
+      console.log('inside GET: status code', statusCode);
+      // body.results.concat(message);
+      results.push({username: 'Jono', message: 'Do my bidding!'});
     } else {
       statusCode = 404;
+      console.log('error code:', statusCode);
+      request.on('error', function(err) {
+        console.error('ERROR: ', err);
+      });
     }
   } else if (request.method === 'POST') {
     statusCode = 201;
+    // results.push({username: 'Jono', message: 'Do my bidding!'});
+    // results.push(request.data);
+    console.log('inside POST: status code', statusCode);
+
+    // request.on('data', function(chunk) {
+    //   results.push(chunk);
+    //   console.log('chunk? ', chunk);
+    // });
   }
 
 
+
   // See the note below about CORS headers.
-  var headers = defaultCorsHeaders;
 
   // Tell the client we are sending them plain text.
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = 'application/json';
+
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
-
   response.writeHead(statusCode, headers);
 
   // Make sure to always call response.end() - Node may not send
@@ -62,7 +79,18 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end(JSON.stringify(request.data));
+  // response.end(JSON.stringify(request.data));
+    // console.log(statusCode);
+  var body = {
+    headers: headers,
+    method: request.method,
+    url: request.url,
+    statusCode: statusCode,
+    results: results
+  };
+
+  // console.log('something');
+  response.end(JSON.stringify(body));
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
