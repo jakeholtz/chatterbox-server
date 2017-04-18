@@ -1,10 +1,11 @@
 var app = {
 
-  server: 'http://parse.sfm6.hackreactor.com/chatterbox/classes/messages',
+  server: 'http://127.0.0.1:3000/classes/messages',
   username: 'anonymous',
   roomname: 'lobby',
   lastMessageId: 0,
   friends: {},
+
   messages: [],
 
   init: function() {
@@ -30,7 +31,7 @@ var app = {
 
     $.ajax({
       url: app.server,
-      type: 'POST',
+      method: 'POST',
       data: message,
       success: function (data) {
         app.$message.val('');
@@ -45,7 +46,7 @@ var app = {
   fetch: function(animate) {
     $.ajax({
       url: app.server,
-      type: 'GET',
+      method: 'GET',
       data: { order: '-createdAt' },
       contentType: 'application/json',
       success: function(data) {
