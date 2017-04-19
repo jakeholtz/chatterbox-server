@@ -66,9 +66,23 @@ describe('server', function() {
     });
   });
 
-  it('Should 404 when asked for a nonexistent endpoint', function(done) {
+  it('should 404 when asked for a nonexistent endpoint', function(done) {
     request('http://127.0.0.1:3000/arglebargle', function(error, response, body) {
       expect(response.statusCode).to.equal(404);
+      done();
+    });
+  });
+
+  it('should check if method is valid and does not return a 404 error', function(done) {
+    request('http://127.0.0.1:3000/arglebargle', function(error, response, body) {
+      expect(response.method).to.not.equal(404);
+      done();
+    });
+  });
+
+  it('should check if status code is valid', function(done) {
+    request('http://127.0.0.1:3000/arglebargle', function(error, response, body) {
+      expect(response.statusCode).to.be.a('number');
       done();
     });
   });
